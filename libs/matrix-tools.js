@@ -1,3 +1,5 @@
+import { dotVector } from "./vector-tools.js";
+
 export function allocBlockArray(width, height, defaultValue) {
 	const array = new Array(height);
 	for (let i = 0; i < height; i++) {
@@ -57,4 +59,166 @@ export function convolute(input, kernel, oobBehavior = { x: "clamp", y: "clamp" 
 	}
 
 	return output;
+}
+
+//Moved from vector.js, may not be compatible
+
+export function transpose(matrix) {
+	const result = [];
+	for(let row = 0; row < matrix.length; row++){
+		const newRow = [];
+		for(let col = 0; col < matrix[row].length; col++){
+			newRow.push(matrix[col][row]);
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function getDeterminantSubmatrix(matrix, row, col){
+	const result = [];
+	for(let i = 0; i < matrix.length; i++){
+		const newRow = [];
+		if(i === row) continue;
+		for(let j = 0; j < matrix[i].length; j++){
+			if(j === col) continue;
+			newRow.push(matrix[i][j]);
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function getDeterminant(matrix){
+	let result = 0;
+
+	if (matrix.length === 2 && matrix[0].length === 2) return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+
+	for(let i = 0; i < matrix[0].length; i++){
+		if(i % 2 === 0){
+			result += matrix[0][i] * getDeterminant(getDeterminantSubmatrix(matrix, 0, i));
+		} else {
+			result -= matrix[0][i] * getDeterminant(getDeterminantSubmatrix(matrix, 0, i));
+		}
+	}
+
+	return result;
+}
+
+export function getCofactor(matrix, row, col){
+	const determinant = getDeterminant(getDeterminantSubmatrix(matrix, row, col));
+	return (row + col) % 2 === 1
+		? -determinant
+		: determinant;
+}
+
+export function getCofactorMatrix(matrix){
+	const result = [];
+	for(let row = 0; row < matrix.length; row++){
+		const newRow = [];
+		for (let col = 0; col < matrix[row].length; col++) {
+			newRow.push(getCofactor(matrix, row, col));
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function getAdjugate(matrix){
+	return transpose(getCofactorMatrix(matrix));
+}
+
+export function getInverse(matrix){
+	return scaleMatrix(getAdjugate(matrix), 1 / getDeterminant(matrix));
+}
+
+export function mapMatrix(matrix, func){
+	const result = [];
+	for (let row = 0; row < matrix.length; row++) {
+		const newRow = [];
+		for (let col = 0; col < matrix[row].length; col++) {
+			newRow.push(func(matrix[row][col], row, col));
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function addMatrix(a, b){
+	return mapMatrix(a, (x, r, c) => x + b[r][c]);
+}
+
+export function subtractMatrix(a, b) {
+	return mapMatrix(a, (x, r, c) => x - b[r][c]);
+}
+
+export function scaleMatrix(matrix, s) {
+	return mapMatrix(matrix, (x, r, c) => x * s);
+}
+
+export function divideMatrix(matrix, s) {
+	return mapMatrix(matrix, (x, r, c) => x / s);
+}
+
+
+export function trimMatrix(matrix, height, width) {
+	const result = [];
+	for (let row = 0; row < height; row++) {
+		const newRow = [];
+		for (let col = 0; col < width; col++) {
+			newRow.push(matrix[row][col]);
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function getColumn(matrix, col){
+	const result = [];
+	for(let row = 0; row < matrix.length; row++){
+		result.push(matrix[row][col]);
+	}
+	return result;
+}
+
+//A's rows must equal B's columns, no check is given
+export function multiplyMatrix(a, b) {
+	const result = [];
+	for (let row = 0; row < a.length; row++) {
+		const newRow = [];
+		for (let col = 0; col < b[row].length; col++) {
+			newRow.push(dotVector(a[row], getColumn(b, col)));
+		}
+		result.push(newRow);
+	}
+
+	return result;
+}
+
+export function asMatrix(array, height, width) {
+	const result = [];
+	for (let row = 0; row < height; row++) {
+		const newRow = [];
+		for (let col = 0; col < width; col++) {
+			newRow.push(array[row * width + col]);
+		}
+		result.push(newRow);
+	}
+	return result;
+}
+
+export function multiplyMatrixVector(vector, matrix){
+	if(vector.length != matrix.length || vector.length != matrix[0].length) throw new Error('Invalid matrix dimensions');
+
+	const resultVector = new Array(vector.length);
+
+	for(let row = 0; row < matrix.length; row++){
+		let result = 0;
+		for(let col = 0; col < matrix[row].length; col++){
+			result += vector[col] * matrix[row][col];
+		}
+		resultVector[row] = result;
+	}
+
+	return resultVector;
 }

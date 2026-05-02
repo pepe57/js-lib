@@ -22,7 +22,7 @@ export class IdbStorage {
   get(key) {
     return new Promise((resolve, reject) => {
       this.idbPromise
-        .then(idb => {
+        .then(_idb => {
           const transaction = this.idb.transaction(this.options.siloName, "readonly");
           const store = transaction.objectStore(this.options.siloName);
           const request = store.get(key);
@@ -60,7 +60,7 @@ export class IdbStorage {
 
   openIndexDb() {
     return new Promise((resolve, reject) => {
-      let openRequest = indexedDB.open(this.options.name, 1);
+      const openRequest = indexedDB.open(this.options.name, 1);
       openRequest.onerror = () => reject(openRequest.error);
       openRequest.onupgradeneeded = e => {
         if (!e.target.result.objectStoreNames.contains(this.options.siloName)) {

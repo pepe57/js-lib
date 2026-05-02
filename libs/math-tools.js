@@ -92,6 +92,31 @@ export function floorAtPosition(value, position){
 	return leftShiftBase10(Math.floor(rightShiftBase10(value, position)), position);
 }
 
-export function getFractionalPart(num) {
-	return Math.abs(num % 1);
+/**
+ * floors a value to the nearest odd value
+ * @param {number} value 
+ * @returns 
+ */
+export function floorOdd(value){
+	const v = Math.floor(value);
+	return v % 2 === 1 ? v : v - 1;
+}
+
+/**
+ * floors a value to the nearest odd value
+ * @param {number} value 
+ * @returns 
+ */
+export function floorEven(value){
+	const v = Math.floor(value);
+	return v % 2 === 0 ? v : v - 1;
+}
+
+/**
+ * gets the fractional part of floating point number
+ * @param {number} value 
+ * @returns 
+ */
+export function getFractionalPart(value) {
+	return Math.abs(value % 1);
 }

@@ -1,7 +1,8 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 import { normalizeNumber } from "../../libs/number-tools.js";
-import { dotVector, getAdjugate, getCofactor, getCofactorMatrix, getDeterminant, getDeterminantSubmatrix, getInverse, mapMatrix, multiplyMatrix, scaleMatrix, transpose, trimMatrix, asMatrix, addVector, subtractVector, scaleVector, divideVector, addMatrix, divideMatrix, multiplyMatrixVector  } from "../../libs/vector-tools.js";
+import { dotVector, addVector, subtractVector, scaleVector, divideVector  } from "../../libs/vector-tools.js";
+import { transpose, trimMatrix, addMatrix, divideMatrix, asMatrix, getAdjugate, getCofactor, getCofactorMatrix, getDeterminant, getDeterminantSubmatrix, getInverse, mapMatrix, multiplyMatrix, scaleMatrix, multiplyMatrixVector } from "../../libs/matrix-tools.js";
 
 describe("vector-tools", () => {
 	describe(".addVector", () => {

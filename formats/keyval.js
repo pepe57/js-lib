@@ -13,3 +13,4 @@ export function parseKeyVals(txt, { valueDelimiter = ":", lineDelimiter = "\n" }
 		.map(x => x.map(y => y.trim()));
 	return Object.fromEntries(keyvals);
 }
+export const parseTextMap = txt => parseKeyVals(txt, { valueDelimiter: ":", lineDelimiter: ";" });

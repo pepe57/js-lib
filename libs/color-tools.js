@@ -26,7 +26,7 @@ export function colorToHexString(rgba) {
 	return "#" + red + green + blue + alpha;
 }
 export function colorToRgba(rgba) {
-	var out = "rgba(";
+	let out = "rgba(";
 	out += rgba.red + ",";
 	out += rgba.green + ",";
 	out += rgba.blue;

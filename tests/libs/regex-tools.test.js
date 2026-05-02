@@ -1,3 +1,5 @@
+import { describe, it } from "@std/testing/bdd"
+import { expect } from "@std/expect";
 import { getCaptureMatches } from "../../libs/regex-tools.js";
 
 describe(".getCaptureMatches", () => {

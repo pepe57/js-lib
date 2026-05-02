@@ -17,5 +17,9 @@
         "no-control-regex"
       ]
     }
+  },
+  "fmt": {
+    "useTabs": true,
+    "indentWidth": 1
   }
 }

@@ -1,7 +1,7 @@
 import { describe, it } from "@std/testing/bdd";
 import { expect } from "@std/expect";
 
-import { getSteps, getClosest, lerp, inverseLerp, leftShiftBase10, rightShiftBase10, floorAtPosition, getLinearSpace } from "../../libs/math-tools.js";
+import { getSteps, getClosest, lerp, inverseLerp, leftShiftBase10, rightShiftBase10, floorAtPosition, getLinearSpace, floorOdd, floorEven } from "../../libs/math-tools.js";
 import { multiTest } from "../test-tools.js";
 
 describe("math-tools", () => {
@@ -89,5 +89,21 @@ describe("math-tools", () => {
 		].forEach(test => it(`should get ${test[1]} for args ${[test[0]]}`, () => {
 			expect(floorAtPosition(test[0][0], test[0][1])).toBeCloseTo(test[1], 5);
 		}))
+	});
+	describe("floorOdd", () => {
+		multiTest([
+			{ args: [3.5], expected: 3 },
+			{ args: [4.5], expected: 3 }
+		], (test) => {
+			expect(floorOdd(...test.args)).toEqual(test.expected);
+		});
+	});
+	describe("floorEven", () => {
+		multiTest([
+			{ args: [3.5], expected: 2 },
+			{ args: [4.5], expected: 4 }
+		], (test) => {
+			expect(floorEven(...test.args)).toEqual(test.expected);
+		});
 	});
 });
